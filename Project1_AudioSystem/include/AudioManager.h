@@ -39,10 +39,12 @@ namespace audio
 		// Loading Audio
 		const char* LoadAudio(const char* file, int loadType);
 
-		// Play audio
+		// Play audio in the next available channel
 		int PlayAudio(const char* audioName);
 
 		// Modifying Channel Values
+		void StopChannel(int id);
+		void SetPaused(int id, bool value);
 		void SetChannelVolume(int id, float value);
 		void SetChannelPitch(int id, float value);
 		void SetChannelPan(int id, float value);
@@ -50,6 +52,7 @@ namespace audio
 		// Retrieving information
 		bool IsChannelPlaying(int id);
 		bool IsAudioLoaded(const char* audioName);
+		void GetAudioLength(const char* audioName, unsigned int& value);
 		void GetPlaybackPosition(int id, unsigned int& value);
 		void GetChannelPitch(int id, float &value);
 		void GetChannelPan(int id, float& value);

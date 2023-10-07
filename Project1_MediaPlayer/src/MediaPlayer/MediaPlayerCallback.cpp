@@ -10,12 +10,59 @@ MediaPlayerCallback::~MediaPlayerCallback()
 
 void MediaPlayerCallback::Execute(const char* key, const char* action)
 {
-    if (action == "PLAY")
+    // Audio controls
+    if (strcmp(action, "PLAY") == 0)
     {
         this->m_mediaPlayer.PlayAudio(key);
+        return;
     }
-    else
+    if (strcmp(action, "PAUSE") == 0)
     {
-        printf("[%s] Not implemented yet!\n", action);
+        this->m_mediaPlayer.PauseAudio(key);
+        return;
     }
+    if (strcmp(action, "STOP") == 0)
+    {
+        this->m_mediaPlayer.StopAudio(key);
+        return;
+    }
+
+    // Volume
+    if (strcmp(action, "INCREASE_VOLUME") == 0)
+    {
+        this->m_mediaPlayer.AdjustVolume(key, 0.1);
+        return;
+    }
+    if (strcmp(action, "DECREASE_VOLUME") == 0)
+    {
+        this->m_mediaPlayer.AdjustVolume(key, -0.1);
+        return;
+    }
+
+    // Pitch
+    if (strcmp(action, "INCREASE_PITCH") == 0)
+    {
+        this->m_mediaPlayer.AdjustPitch(key, 0.1);
+        return;
+    }
+    if (strcmp(action, "DECREASE_PITCH") == 0)
+    {
+        this->m_mediaPlayer.AdjustPitch(key, -0.1);
+        return;
+    }
+
+    // Pan
+    if (strcmp(action, "INCREASE_PAN") == 0)
+    {
+        this->m_mediaPlayer.AdjustPan(key, 0.1);
+        return;
+    }
+    if (strcmp(action, "DECREASE_PAN") == 0)
+    {
+        this->m_mediaPlayer.AdjustPan(key, -0.1);
+        return;
+    }
+
+    printf("[%s] Not implemented yet!\n", action);
+    return;
 }

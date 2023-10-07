@@ -123,7 +123,7 @@ namespace audio
 		// Since we have not already loaded this file, we can add it to our
 		// AudioMap as a cached value.
 		// We can add this first so we can reference the audio file when
-		// Creating the sound.
+		// Creating the sound.;
 		this->m_mappAudio.insert(std::pair<const char*, Audio*>(audioName, new Audio()));
 
 		FMOD_RESULT result;
@@ -175,10 +175,9 @@ namespace audio
 		}
 		printf("AudioFound!\n");
 
-
 		// Get the current channel id, and calculate the next one
-		int channelId = this->m_idNextChannel;
-		Channel* channel = this->m_vecpChannel[channelId];
+		int idChannel = this->m_idNextChannel;
+		Channel* channel = this->m_vecpChannel[idChannel];
 
 		// Attemp to play our sound.
 		FMOD_RESULT result = this->m_pSystem->playSound(it->second->pAudio, 0, false, &channel->pChannel);
@@ -191,7 +190,33 @@ namespace audio
 		this->m_idNextChannel = (this->m_idNextChannel + 1) % this->m_MAX_CHANNELS;
 
 		// Return the channel id used so we can modify it if needed.
-		return channelId;
+		return idChannel;
+	}
+
+	void AudioManager::StopChannel(int id)
+	{
+		// If our AudioManager is not initialized, we shouldn't do anything
+		if (!this->m_isInitialized)
+		{
+			printf("Not initialized!\n");
+			return;
+		}
+
+		this->m_vecpChannel[id]->pChannel->stop();
+		return;
+	}
+
+	void AudioManager::SetPaused(int id, bool value)
+	{
+		// If our AudioManager is not initialized, we shouldn't do anything
+		if (!this->m_isInitialized)
+		{
+			printf("Not initialized!\n");
+			return;
+		}
+
+		this->m_vecpChannel[id]->pChannel->setPaused(value);
+		return;
 	}
 
 	void AudioManager::Update()
@@ -270,6 +295,19 @@ namespace audio
 		}
 		
 		return true;
+	}
+
+	void AudioManager::GetAudioLength(const char* audioName, unsigned int& value)
+	{
+		std::map<const char*, Audio*>::iterator it = this->m_mappAudio.find(audioName);
+		if (it == this->m_mappAudio.end())
+		{
+			// Audio not found
+			return;
+		}
+
+		FMOD_RESULT result = it->second->pAudio->getLength(&value, FMOD_TIMEUNIT_MS);
+		FMODCheckError(result);
 	}
 
 	void AudioManager::GetChannelPitch(int id, float& value)

@@ -1,8 +1,10 @@
 #include "UserInterface.h"
 
 #include <iostream>
+#include <string>
 #include "Styles/Colors.h"
 #include "Styles/Sizes.h"
+#include "Utils.h"
 
 UserInterface::UserInterface()
 {
@@ -60,16 +62,51 @@ void UserInterface::NewFrame()
 }
 
 void UserInterface::m_NewButton(const char* label, ImVec2& buttonSize, unsigned int color, 
-                                iButtonCallback& callback, const char* audioName, const char* action)
+                                iButtonCallback& callback, const char* key, const char* action)
 {
     // Set the button's background color to green
     ImGui::PushStyleColor(ImGuiCol_Button, color);
-    if (ImGui::Button(label, buttonSize)) {
-        callback.Execute(audioName, action);
+    // Imgui needs ## to set different ids for each button, so it doesn't use the repeated label
+    // It will use the string before ## as the label and the whole string as the ID for the button
+    std::string buttonID = std::string(label) + "##" + key + action;
+    if (ImGui::Button(buttonID.c_str(), buttonSize)) {
+        callback.Execute(key, action);
     }
     // Restore the default button style color
     ImGui::PopStyleColor();
     return;
+}
+
+/* Component layout:
+* [-] LABEL [+]
+*/
+void UserInterface::m_NewRegulator(const char* label, iButtonCallback& callback, const char* key)
+{
+    ImVec2 buttonMSize(BUTTON_WIDTH_M, BUTTON_HEIGHT_M);
+
+    // Begin a horizontal layout
+    ImGui::BeginGroup();
+
+    std::string actionDecrease = std::string("DECREASE_") + label;
+    this->m_NewButton("-", buttonMSize, GREY_LIGHT_BLUE, callback, key, actionDecrease.c_str());
+    ImGui::SameLine();
+    ImGui::Text(label);
+    ImGui::SameLine();
+    std::string actionIncrease = std::string("INCREASE_") + label;
+    this->m_NewButton("+", buttonMSize, GREY_LIGHT_BLUE, callback, key, actionIncrease.c_str());
+
+    // End the horizontal layout
+    ImGui::EndGroup();
+
+    return;
+}
+
+void UserInterface::m_NewProgressBar(float currentPosition, float maxLength)
+{
+    // Calculate the ratio of the current position to the maximum length
+    float ratio = currentPosition / maxLength;
+
+    ImGui::ProgressBar(ratio, ImVec2(-FLT_MIN, 0.0f));
 }
 
 void UserInterface::BuildFrame(const char* windowName, 
@@ -91,7 +128,7 @@ void UserInterface::BuildFrame(const char* windowName,
     // UI
     // ---------------------------------------------
     
-    // Get current window sizes to allow window resizing
+    // Screen divided in 3 gives a good space for each audio button and info
     ImVec2 displaySize = ImGui::GetIO().DisplaySize;
     const int SEPARATOR_HEIGHT = displaySize[1] / 3;
 
@@ -140,53 +177,38 @@ void UserInterface::BuildFrame(const char* windowName,
         this->m_NewButton("STOP", buttonSize, RED, callback, audio.first, "STOP");
         // --------------------------------------------
 
-        ImVec2 buttonMSize(BUTTON_WIDTH_M, BUTTON_HEIGHT_M);
-        // Volume management
+        // Volume regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        // Begin a horizontal layout
-        ImGui::BeginGroup();
-
-        this->m_NewButton("-", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "INCREASE_VOLUME");
-        ImGui::SameLine();
-        ImGui::Text("VOLUME");
-        ImGui::SameLine();
-        this->m_NewButton("+", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "DECREASE_VOLUME");
-
-        // End the horizontal layout
-        ImGui::EndGroup();
+        this->m_NewRegulator("VOLUME", callback, audio.first);
         // --------------------------------------------
  
-        // Pitch management
+        // Pitch regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        // Begin a horizontal layout
-        ImGui::BeginGroup();
-
-        this->m_NewButton("-", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "INCREASE_PITCH");
-        ImGui::SameLine();
-        ImGui::Text("PITCH");
-        ImGui::SameLine();
-        this->m_NewButton("+", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "DECREASE_PITCH");
-
-        // End the horizontal layout
-        ImGui::EndGroup();
+        this->m_NewRegulator("PITCH", callback, audio.first);
         // --------------------------------------------
  
-        // Pan management
+        // Pan regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        // Begin a horizontal layout
-        ImGui::BeginGroup();
+        this->m_NewRegulator("PAN", callback, audio.first);
+        // --------------------------------------------
 
-        this->m_NewButton("-", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "INCREASE_PAN");
-        ImGui::SameLine();
-        ImGui::Text("PAN");
-        ImGui::SameLine();
-        this->m_NewButton("+", buttonMSize, GREY_LIGHT_BLUE, callback, audio.first, "DECREASE_PAN");
+        // Playback position bar
+        // --------------------------------------------
+        ImGui::NewLine();
+        ImGui::NewLine();
+        ImGui::SameLine(0, TEXT_PADDING_LEFT);
 
-        // End the horizontal layout
-        ImGui::EndGroup();
+        std::string formattedPlaybackPos = myTime::FormatTime(audio.second["PLAYBACK"]);
+        std::string formattedLength = myTime::FormatTime(audio.second["LENGTH"]);
+        std::string formattedTimeElapsed = formattedPlaybackPos + "/" + formattedLength;
+
+        ImGui::Text(formattedTimeElapsed.c_str());
+
+        ImGui::SameLine();
+        this->m_NewProgressBar(audio.second["PLAYBACK"], audio.second["LENGTH"]);
         // --------------------------------------------
 
         separatorIndex += 1;
