@@ -16,8 +16,8 @@ namespace audio
 
 		bool m_isInitialized;
 
-		std::map<const char*, Audio*> m_mappAudio;	// This is our cache
-		std::vector<Channel*> m_vecpChannel;		// Maintaint a list of channels 
+		std::map<const char*, Audio*> m_mappAudio; // This is our cache
+		std::vector<Channel*> m_vecpChannel;	   // Maintaint a list of channels
 
 		int m_idNextChannel;					// The next channel Id that we can return
 
@@ -37,10 +37,10 @@ namespace audio
 		void ClearAudioMap();
 
 		// Loading Audio
-		void LoadAudio(const char* file, int loadType);
+		const char* LoadAudio(const char* file, int loadType);
 
 		// Play audio
-		int PlayAudio(const char* AudioName);
+		int PlayAudio(const char* audioName);
 
 		// Modifying Channel Values
 		void SetChannelVolume(int id, float value);
@@ -49,12 +49,10 @@ namespace audio
 
 		// Retrieving information
 		bool IsChannelPlaying(int id);
+		bool IsAudioLoaded(const char* audioName);
 		void GetPlaybackPosition(int id, unsigned int& value);
 		void GetChannelPitch(int id, float &value);
 		void GetChannelPan(int id, float& value);
 		void GetChannelVolume(int id, float& value);
-
-
-		void PrintInfo() const;
 	};
 }

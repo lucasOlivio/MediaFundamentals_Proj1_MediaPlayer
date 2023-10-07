@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MediaPlayer.cpp">
+    <ClCompile Include="src\MediaPlayer\MediaPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderingSystem\RenderingSystem.cpp">
+    <ClCompile Include="src\RenderingSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui\imgui_tables.cpp">
@@ -54,15 +54,30 @@
     <ClCompile Include="src\ShaderManager\ShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\Styles\Sizes.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\UserInterface.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UserInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MediaPlayer\MediaPlayerCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\MediaPlayer.h">
+    <ClInclude Include="include\MediaPlayer\MediaPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\RenderingSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\UIUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_impl_glfw.h">
@@ -98,9 +113,38 @@
     <ClInclude Include="include\CommonOpengl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Styles\Colors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\iButtonCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MainSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MediaPlayer\MediaPlayerCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
     <None Include="src\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="audioDB.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Audio\pagode.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\piano.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="Assets\Audio\samba.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

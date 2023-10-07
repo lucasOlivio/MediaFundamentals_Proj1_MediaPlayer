@@ -1,18 +1,18 @@
-#include "MediaPlayer.h"
+#include "MainSystem.h"
 
 int main()
 {
-	MediaPlayer* pMediaPlayer = new MediaPlayer();
-	bool mediaInitialized = pMediaPlayer->Setup();
-	if (!mediaInitialized)
+	MainSystem* pMainSystem = new MainSystem();
+	bool systemInitialized = pMainSystem->Setup();
+	if (!systemInitialized)
 	{
 		system("pause");
 		return EXIT_FAILURE;
 	}
 
-	pMediaPlayer->MainLoop();
+	pMainSystem->MainLoop();
 
-	pMediaPlayer->Destroy();
+	pMainSystem->Destroy();
 
 	return 0;
 }

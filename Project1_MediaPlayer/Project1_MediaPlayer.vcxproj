@@ -140,6 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="src\MainSystem.cpp" />
+    <ClCompile Include="src\MediaPlayer\MediaPlayerCallback.cpp" />
+    <ClCompile Include="src\UserInterface.cpp" />
+    <ClCompile Include="include\UserInterface.h" />
+    <ClCompile Include="include\Styles\Sizes.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
@@ -148,13 +153,15 @@
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\MediaPlayer.cpp" />
-    <ClCompile Include="src\RenderingSystem\RenderingSystem.cpp" />
+    <ClCompile Include="src\MediaPlayer\MediaPlayer.cpp" />
+    <ClCompile Include="src\RenderingSystem.cpp" />
     <ClCompile Include="src\ShaderManager\Shader.cpp" />
     <ClCompile Include="src\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CommonOpengl.h" />
+    <ClInclude Include="include\iButtonCallback.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />
@@ -164,14 +171,25 @@
     <ClInclude Include="include\imgui\imstb_rectpack.h" />
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
-    <ClInclude Include="include\MediaPlayer.h" />
+    <ClInclude Include="include\MainSystem.h" />
+    <ClInclude Include="include\MediaPlayer\MediaPlayer.h" />
+    <ClInclude Include="include\MediaPlayer\MediaPlayerCallback.h" />
     <ClInclude Include="include\RenderingSystem.h" />
     <ClInclude Include="include\ShaderManager.h" />
-    <ClInclude Include="include\UIUtils.h" />
+    <ClInclude Include="include\Styles\Colors.h" />
+    <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
     <None Include="src\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="audioDB.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Assets\Audio\pagode.wav" />
+    <Media Include="Assets\Audio\piano.wav" />
+    <Media Include="Assets\Audio\samba.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

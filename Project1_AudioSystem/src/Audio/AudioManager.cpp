@@ -71,6 +71,9 @@ namespace audio
 		{
 			result = pair.second->pAudio->release();
 			FMODCheckError(result);
+
+			delete pair.first;
+			delete pair.second;
 		}
 	}
 
@@ -98,55 +101,63 @@ namespace audio
 	  * 
 	  * @param file: Audio file name to load
 	  * @param loadType: Which type will be used to load this file into memory (1 - sample, 2 - stream)
+	  * @param audioName: Sets the audio name key, after removing path
+	  * 
+	  * @return: The name of the audio file used as key
 	  */
-	void AudioManager::LoadAudio(const char* file, int loadType)
+	const char* AudioManager::LoadAudio(const char* file, int loadType)
 	{
 		// If our AudioManager is not initialized, we shouldn't do anything
 		if (!this->m_isInitialized)
-			return;
+			return NULL;
 
 		// Search our cache if we have already loaded this file
 		// If we have already loaded the file, return
-		if (this->m_mappAudio.find(file) != this->m_mappAudio.end())
+		const char* audioName = audio::GetFileFromPath(file);
+		if (this->IsAudioLoaded(audioName))
 		{
 			printf("AudioManager::LoadAudio() Audio already loaded!\n");
-			return;
+			return NULL;
 		}
 
 		// Since we have not already loaded this file, we can add it to our
 		// AudioMap as a cached value.
 		// We can add this first so we can reference the audio file when
 		// Creating the sound.
-		this->m_mappAudio.insert(std::pair<const char*, Audio*>(file, new Audio()));
+		this->m_mappAudio.insert(std::pair<const char*, Audio*>(audioName, new Audio()));
 
 		FMOD_RESULT result;
 		switch (loadType)
 		{
 		case 1:
-			// This call loads our audio file entirely into memory
-			result = this->m_pSystem->createSound(file, FMOD_DEFAULT, 0, &this->m_mappAudio[file]->pAudio);
+			// This call loads our audio entirely into memory
+			result = this->m_pSystem->createSound(file, FMOD_DEFAULT, 0, &this->m_mappAudio[audioName]->pAudio);
 			break;
 		case 2:
 			// This will only load the audio resource data as needed
-			// to play the audio file.
-			result = this->m_pSystem->createStream(file, FMOD_DEFAULT, 0, &this->m_mappAudio[file]->pAudio);
+			// to play the audio.
+			result = this->m_pSystem->createStream(file, FMOD_DEFAULT, 0, &this->m_mappAudio[audioName]->pAudio);
 			break;
 		default:
 			// Not recognized load type
 			printf("AudioManager::LoadAudio() Load type not recognized: %d\n", loadType);
-			return;
+			return NULL;
 		}
 
 		if (result != FMOD_OK)
 		{
+			printf("AudioManager::LoadAudio(%s): Error loading file: ", audioName);
 			FMODCheckError(result);
-			return;
+			return NULL;
 		}
 
-		printf("AudioManager::LoadAudio(%s): Loaded successful!\n", file);
+		this->m_mappAudio[audioName]->name = audioName;
+		printf("AudioManager::LoadAudio(%s): Loaded successful!\n", audioName);
+
+		return audioName;
 	}
 
-	int AudioManager::PlayAudio(const char* AudioName)
+	int AudioManager::PlayAudio(const char* audioName)
 	{
 		// If our AudioManager is not initialized, we shouldn't do anything
 		if (!this->m_isInitialized)
@@ -156,7 +167,7 @@ namespace audio
 		}
 
 		// Check our cache to see if the audio exists.
-		std::map<const char*, Audio*>::iterator it = this->m_mappAudio.find(AudioName);
+		std::map<const char*, Audio*>::iterator it = this->m_mappAudio.find(audioName);
 		if (it == this->m_mappAudio.end())
 		{
 			printf("Audio not found!\n");
@@ -177,8 +188,7 @@ namespace audio
 			return this->m_idNextChannel;
 		}
 
-		// Only goes to next channel id if sound playing works
-		this->m_idNextChannel = (this->m_idNextChannel + 1) % 10;
+		this->m_idNextChannel = (this->m_idNextChannel + 1) % this->m_MAX_CHANNELS;
 
 		// Return the channel id used so we can modify it if needed.
 		return channelId;
@@ -249,9 +259,22 @@ namespace audio
 		FMODCheckError(result);
 	}
 
+	bool AudioManager::IsAudioLoaded(const char* audioName)
+	{
+		// Check our cache to see if the audio exists.
+		std::map<const char*, Audio*>::iterator it = this->m_mappAudio.find(audioName);
+		if (it == this->m_mappAudio.end())
+		{
+			// Audio not found
+			return false;
+		}
+		
+		return true;
+	}
+
 	void AudioManager::GetChannelPitch(int id, float& value)
 	{
-		// Use this call to get the playback position of a channel.
+		// Use this call to get the pitch value of a channel.
 		FMOD_RESULT result = this->m_vecpChannel[id]->pChannel->getPitch(&value);
 		FMODCheckError(result);
 	}
@@ -263,13 +286,10 @@ namespace audio
 		value = this->m_vecpChannel[id]->pan;
 	}
 
-	void AudioManager::PrintInfo() const
+	void AudioManager::GetChannelVolume(int id, float& value)
 	{
-		size_t size = this->m_vecpChannel.size();
-
-		for (size_t i = 0; i < this->m_vecpChannel.size(); i++)
-		{
-			// You can fill this in.
-		}
+		// Use this call to get the volume value of a channel.
+		FMOD_RESULT result = this->m_vecpChannel[id]->pChannel->getVolume(&value);
+		FMODCheckError(result);
 	}
 } // end audio namespace

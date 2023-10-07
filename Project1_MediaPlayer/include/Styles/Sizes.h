@@ -1,0 +1,23 @@
+#pragma once
+
+// Framing
+#define SEPARATOR_PADDING 15
+
+// Text
+#define TEXT_PADDING_LEFT 90
+#define TEXT_PADDING_TOP 15
+#define TEXT_FONT_SIZE_TITLE 3
+#define TEXT_FONT_SIZE 2
+
+// Buttons
+#define BUTTON_HEIGHT_L 45
+#define BUTTON_WIDTH_L 75
+#define BUTTON_HEIGHT_M 30
+#define BUTTON_WIDTH_M 50
+#define BUTTON_HEIGHT_S 15
+#define BUTTON_WIDTH_S 25
+#define BUTTON_PADDING_LEFT 90
+#define BUTTON_PADDING_TOP 15
+
+// Containers
+#define CONTAINER_MARGIN 75
