@@ -1,5 +1,5 @@
 #include "MainSystem.h"
-#include "MediaPlayer/MediaPlayerCallback.h"
+#include "AudioSystem/MediaPlayer/MediaPlayerCallback.h"
 
 MainSystem::MainSystem()
 {
@@ -44,7 +44,7 @@ bool MainSystem::Setup()
     // Setup Shaders and program
     // ------------------------------------------------
     this->pShaderManager = new ShaderManager();
-    this->pShaderManager->SetBasePath("src/ShaderManager/Shaders/");
+    this->pShaderManager->SetBasePath("src/RenderingSystem/ShaderManager/Shaders/");
     bool shaderInitialized = this->pShaderManager->SetupShader(this->programName);
     if (!shaderInitialized)
     {
@@ -86,17 +86,14 @@ void MainSystem::Destroy()
 
 void MainSystem::MainLoop()
 {
-    // Here we wrap the UI requests so it doesn't need to know about the media player class
+    // Here we wrap the UI requests so the buttons doesn't need to know about the media player class
     MediaPlayerCallback mpCallback = MediaPlayerCallback(*this->pMediaPlayer);
 
     while (!this->pRenderingSystem->WindowShouldClose())
     {
         // Update the current program id for shaders
         GLint shaderProgramID = this->pShaderManager->GetIDFromShaderProgramName(this->programName);
-        glUseProgram(shaderProgramID);
-
-        // Clear frame for new drawing
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        this->pRenderingSystem->NewFrame(shaderProgramID);
 
         // Initializes new UI frame
         this->pUserInterface->NewFrame();
@@ -106,7 +103,7 @@ void MainSystem::MainLoop()
         this->pUserInterface->BuildFrame(this->programName, mapAudioInfo, mpCallback);
         this->pUserInterface->RenderFrame();
 
-        glfwSwapBuffers(this->pRenderingSystem->pWindow);
-        glfwPollEvents();
+        this->pRenderingSystem->EndFrame();
     }
+    return;
 }

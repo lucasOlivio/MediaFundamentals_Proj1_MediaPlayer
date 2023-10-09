@@ -1,4 +1,4 @@
-#include "ShaderManager.h"
+#include "RenderingSystem/ShaderManager.h"
 
 #include "CommonOpengl.h"	// For all the OpenGL calls, etc.
 

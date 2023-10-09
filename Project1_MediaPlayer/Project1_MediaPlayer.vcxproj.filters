@@ -18,10 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MediaPlayer\MediaPlayer.cpp">
+    <ClCompile Include="src\AudioSystem\MediaPlayer\MediaPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderingSystem.cpp">
+    <ClCompile Include="src\RenderingSystem\RenderingSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui\imgui_tables.cpp">
@@ -48,10 +48,10 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShaderManager\Shader.cpp">
+    <ClCompile Include="src\RenderingSystem\ShaderManager\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ShaderManager\ShaderManager.cpp">
+    <ClCompile Include="src\RenderingSystem\ShaderManager\ShaderManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\Styles\Sizes.h">
@@ -66,18 +66,24 @@
     <ClCompile Include="src\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MediaPlayer\MediaPlayerCallback.cpp">
+    <ClCompile Include="src\AudioSystem\MediaPlayer\MediaPlayerCallback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\MainSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\AudioSystem\AudioUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AudioSystem\AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\MediaPlayer\MediaPlayer.h">
+    <ClInclude Include="include\AudioSystem\MediaPlayer\MediaPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RenderingSystem.h">
+    <ClInclude Include="include\RenderingSystem\RenderingSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\imgui\imgui_impl_glfw.h">
@@ -107,7 +113,7 @@
     <ClInclude Include="include\imgui\imgui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ShaderManager.h">
+    <ClInclude Include="include\RenderingSystem\ShaderManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\CommonOpengl.h">
@@ -125,13 +131,25 @@
     <ClInclude Include="include\MainSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\MediaPlayer\MediaPlayerCallback.h">
+    <ClInclude Include="include\AudioSystem\MediaPlayer\MediaPlayerCallback.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioSystem\AudioUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioSystem\AudioManager\Channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioSystem\AudioManager\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AudioSystem\AudioManager\AudioManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
-    <None Include="src\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
+    <None Include="src\RenderingSystem\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
+    <None Include="src\RenderingSystem\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="audioDB.txt" />

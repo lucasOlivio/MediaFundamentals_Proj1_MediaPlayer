@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1_AudioSystem", "Project1_AudioSystem\Project1_AudioSystem.vcxproj", "{94C5A600-2DAE-4812-B328-09BB61FB579D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1_MediaPlayer", "Project1_MediaPlayer\Project1_MediaPlayer.vcxproj", "{916886B9-4CE0-428F-86E7-7763D6BB4B8D}"
 EndProject
 Global
@@ -15,14 +13,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Debug|x64.ActiveCfg = Debug|x64
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Debug|x64.Build.0 = Debug|x64
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Debug|x86.ActiveCfg = Debug|Win32
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Debug|x86.Build.0 = Debug|Win32
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Release|x64.ActiveCfg = Release|x64
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Release|x64.Build.0 = Release|x64
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Release|x86.ActiveCfg = Release|Win32
-		{94C5A600-2DAE-4812-B328-09BB61FB579D}.Release|x86.Build.0 = Release|Win32
 		{916886B9-4CE0-428F-86E7-7763D6BB4B8D}.Debug|x64.ActiveCfg = Debug|x64
 		{916886B9-4CE0-428F-86E7-7763D6BB4B8D}.Debug|x64.Build.0 = Debug|x64
 		{916886B9-4CE0-428F-86E7-7763D6BB4B8D}.Debug|x86.ActiveCfg = Debug|Win32

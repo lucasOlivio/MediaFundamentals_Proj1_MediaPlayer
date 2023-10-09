@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)include\;$(SolutionDir)Extern\include\;$(SolutionDir)Project1_AudioSystem\include;$(ProjectDir)include\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include\;$(SolutionDir)Extern\include\;$(ProjectDir)include\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\lib\$(Configuration)\glfw;$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Extern\lib\$(Configuration)\fmod;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)include\;$(SolutionDir)Extern\include\;$(SolutionDir)Project1_AudioSystem\include;$(ProjectDir)include\imgui;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)include\;$(SolutionDir)Extern\include\;$(ProjectDir)include\imgui;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\lib\$(Configuration)\glfw;$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Extern\lib\$(Configuration)\fmod;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -117,7 +117,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Project1_AudioSystem.lib;glfw3.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,13 +135,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Project1_AudioSystem.lib;glfw3.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;fmod_vc.lib;fmodL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
+    <ClCompile Include="src\AudioSystem\AudioManager.cpp" />
+    <ClCompile Include="src\AudioSystem\AudioUtils.cpp" />
     <ClCompile Include="src\MainSystem.cpp" />
-    <ClCompile Include="src\MediaPlayer\MediaPlayerCallback.cpp" />
+    <ClCompile Include="src\AudioSystem\MediaPlayer\MediaPlayerCallback.cpp" />
     <ClCompile Include="src\UserInterface.cpp" />
     <ClCompile Include="include\UserInterface.h" />
     <ClCompile Include="include\Styles\Sizes.h" />
@@ -153,13 +155,17 @@
     <ClCompile Include="src\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\MediaPlayer\MediaPlayer.cpp" />
-    <ClCompile Include="src\RenderingSystem.cpp" />
-    <ClCompile Include="src\ShaderManager\Shader.cpp" />
-    <ClCompile Include="src\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="src\AudioSystem\MediaPlayer\MediaPlayer.cpp" />
+    <ClCompile Include="src\RenderingSystem\RenderingSystem.cpp" />
+    <ClCompile Include="src\RenderingSystem\ShaderManager\Shader.cpp" />
+    <ClCompile Include="src\RenderingSystem\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\AudioSystem\AudioManager\Audio.h" />
+    <ClInclude Include="include\AudioSystem\AudioManager\AudioManager.h" />
+    <ClInclude Include="include\AudioSystem\AudioManager\Channel.h" />
+    <ClInclude Include="include\AudioSystem\AudioUtils.h" />
     <ClInclude Include="include\CommonOpengl.h" />
     <ClInclude Include="include\iButtonCallback.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
@@ -172,16 +178,16 @@
     <ClInclude Include="include\imgui\imstb_textedit.h" />
     <ClInclude Include="include\imgui\imstb_truetype.h" />
     <ClInclude Include="include\MainSystem.h" />
-    <ClInclude Include="include\MediaPlayer\MediaPlayer.h" />
-    <ClInclude Include="include\MediaPlayer\MediaPlayerCallback.h" />
-    <ClInclude Include="include\RenderingSystem.h" />
-    <ClInclude Include="include\ShaderManager.h" />
+    <ClInclude Include="include\AudioSystem\MediaPlayer\MediaPlayer.h" />
+    <ClInclude Include="include\AudioSystem\MediaPlayer\MediaPlayerCallback.h" />
+    <ClInclude Include="include\RenderingSystem\RenderingSystem.h" />
+    <ClInclude Include="include\RenderingSystem\ShaderManager.h" />
     <ClInclude Include="include\Styles\Colors.h" />
     <ClInclude Include="include\Utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
-    <None Include="src\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
+    <None Include="src\RenderingSystem\ShaderManager\Shaders\fragmentMyMediaPlayer.glsl" />
+    <None Include="src\RenderingSystem\ShaderManager\Shaders\vertexMyMediaPlayer.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="audioDB.txt" />

@@ -18,7 +18,7 @@ private:
 	// UI custom components
 	void m_NewButton(const char* label, ImVec2& buttonSize, unsigned int color, 
 					iButtonCallback& callback, const char* key, const char* action);
-	void m_NewRegulator(const char* label, iButtonCallback& callback, const char* key);
+	void m_NewRegulator(const char* label, iButtonCallback& callback, const char* key, float ratio);
 	void m_NewProgressBar(float currentPosition, float maxLength);
 public:
 	UserInterface();

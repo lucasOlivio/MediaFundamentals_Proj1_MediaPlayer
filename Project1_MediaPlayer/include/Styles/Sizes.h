@@ -1,5 +1,8 @@
 #pragma once
 
+// Default
+#define DEFAULT_IMGUI_PADDING 16
+
 // Framing
 #define SEPARATOR_PADDING 15
 

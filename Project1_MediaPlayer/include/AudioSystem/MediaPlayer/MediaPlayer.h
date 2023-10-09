@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AudioManager.h"
+#include "AudioSystem/AudioManager/AudioManager.h"
 
 #include <map>
 
@@ -31,6 +31,7 @@ public:
 	const std::map<const char* /*audio name*/,
 					std::map<const char* /*info key*/,
 					               float /*info value*/ >>& GetAudioInfo();
+	void GetAudioIDChannel(const char* audioName, int& idChannel);
 
 	// UI Actions
 	void PlayAudio(const char* audioName);

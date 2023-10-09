@@ -1,4 +1,4 @@
-#include "RenderingSystem.h"
+#include "RenderingSystem/RenderingSystem.h"
 #include "Utils.h"
 
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
@@ -96,7 +96,23 @@ void RenderingSystem::m_UpdateViewport()
     glViewport(0, 0, width, height);
 }
 
-bool RenderingSystem::WindowShouldClose() 
+void RenderingSystem::NewFrame(GLint shaderProgramID)
+{
+    glUseProgram(shaderProgramID);
+
+    // Clear frame for new drawing
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    return;
+}
+
+void RenderingSystem::EndFrame()
+{
+    glfwSwapBuffers(this->pWindow);
+    glfwPollEvents();
+    return;
+}
+
+bool RenderingSystem::WindowShouldClose()
 {
     return glfwWindowShouldClose(this->pWindow);
 }

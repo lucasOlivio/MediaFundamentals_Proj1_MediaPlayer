@@ -8,9 +8,34 @@ void ErrorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
 }
 
+namespace myMath
+{
+    // Wrap number around 1.0 ratio to normalize
+    void WrapRatio(float& ratio, const float& currValue, const float& min, const float& max)
+    {
+        ratio = std::abs(currValue - min) / (max - min);
+        return;
+    }
+
+    void WrapMinMax(float& num, const float& min, const float& max)
+    {
+        if (num < min)
+        {
+            num = min;
+            return;
+        }
+        if (num > max)
+        {
+            num = max;
+            return;
+        }
+        return;
+    }
+}
+
 namespace myTime
 {
-    std::string FormatTime(unsigned int miliseconds)
+    void FormatTime(unsigned int miliseconds, std::string& formatted)
     {
         // Convert time to each needed unit
         unsigned int seconds = miliseconds / 1000;
@@ -25,6 +50,8 @@ namespace myTime
                         << std::setfill('0') << std::setw(2) << minutes << ":"
                         << std::setfill('0') << std::setw(2) << seconds;
 
-        return formattedTime.str();
+        formatted = formattedTime.str();
+
+        return;
     }
 }

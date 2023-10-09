@@ -1,4 +1,4 @@
-#include "MediaPlayer/MediaPlayerCallback.h"
+#include "AudioSystem/MediaPlayer/MediaPlayerCallback.h"
 
 MediaPlayerCallback::MediaPlayerCallback(MediaPlayer& mediaPlayer) : m_mediaPlayer(mediaPlayer)
 {
@@ -30,36 +30,36 @@ void MediaPlayerCallback::Execute(const char* key, const char* action)
     // Volume
     if (strcmp(action, "INCREASE_VOLUME") == 0)
     {
-        this->m_mediaPlayer.AdjustVolume(key, 0.1);
+        this->m_mediaPlayer.AdjustVolume(key, 0.1f);
         return;
     }
     if (strcmp(action, "DECREASE_VOLUME") == 0)
     {
-        this->m_mediaPlayer.AdjustVolume(key, -0.1);
+        this->m_mediaPlayer.AdjustVolume(key, -0.1f);
         return;
     }
 
     // Pitch
     if (strcmp(action, "INCREASE_PITCH") == 0)
     {
-        this->m_mediaPlayer.AdjustPitch(key, 0.1);
+        this->m_mediaPlayer.AdjustPitch(key, 0.1f);
         return;
     }
     if (strcmp(action, "DECREASE_PITCH") == 0)
     {
-        this->m_mediaPlayer.AdjustPitch(key, -0.1);
+        this->m_mediaPlayer.AdjustPitch(key, -0.1f);
         return;
     }
 
     // Pan
     if (strcmp(action, "INCREASE_PAN") == 0)
     {
-        this->m_mediaPlayer.AdjustPan(key, 0.1);
+        this->m_mediaPlayer.AdjustPan(key, 0.1f);
         return;
     }
     if (strcmp(action, "DECREASE_PAN") == 0)
     {
-        this->m_mediaPlayer.AdjustPan(key, -0.1);
+        this->m_mediaPlayer.AdjustPan(key, -0.1f);
         return;
     }
 

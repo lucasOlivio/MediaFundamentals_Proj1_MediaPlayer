@@ -1,8 +1,17 @@
-#include "MediaPlayer/MediaPlayer.h"
+#include "AudioSystem/MediaPlayer/MediaPlayer.h"
+#include "Utils.h"
 
 #include <fstream>
 #include <sstream>
 #include <string>
+
+// Parameters for the audio management
+const float MIN_PITCH = 0.0;
+const float MAX_PITCH = 2.0f;
+const float MIN_VOLUME = 0.0f;
+const float MAX_VOLUME = 1.0f;
+const float MIN_PAN = -1.0f;
+const float MAX_PAN = 1.0f;
 
 MediaPlayer::MediaPlayer()
 {
@@ -29,6 +38,7 @@ void MediaPlayer::m_LoadAudios()
     int loadType;
     char filePath[MAX_PATH_SIZE];
     // TODO: Understand better the char pointers and how to get paths with spaces
+    // For now we don't accept paths with spaces
     while (audioDB >> loadType >> filePath)
     {
         char* heapFilePath = new char[MAX_PATH_SIZE]; // Avoid overriding our pointer
@@ -111,6 +121,13 @@ const std::map<const char* /*audio name*/,
         this->m_vecAudioInfo[pair.first]["VOLUME"] = volume;
         this->m_vecAudioInfo[pair.first]["PITCH"] = pitch;
         this->m_vecAudioInfo[pair.first]["PAN"] = pan;
+
+        // Wrap pitch and pan around 1.0 for simplifying display
+        float pitchRatio; myMath::WrapRatio(pitchRatio, pitch, MIN_PITCH, MAX_PITCH);
+        this->m_vecAudioInfo[pair.first]["PITCH_RATIO"] = pitchRatio;
+        float panRatio; myMath::WrapRatio(panRatio, pan, MIN_PAN, MAX_PAN);
+        this->m_vecAudioInfo[pair.first]["PAN_RATIO"] = panRatio;
+
         this->m_vecAudioInfo[pair.first]["PLAYBACK"] = playback;
         this->m_vecAudioInfo[pair.first]["LENGTH"] = totalLength;
         this->m_vecAudioInfo[pair.first]["PLAYING"] = playing;
@@ -124,17 +141,24 @@ const std::map<const char* /*audio name*/,
     return this->m_vecAudioInfo;
 }
 
-// UI Actions
-// --------------------------------------------------------------------
-void MediaPlayer::PlayAudio(const char* audioName)
+void MediaPlayer::GetAudioIDChannel(const char* audioName, int& idChannel)
 {
+    idChannel = -1;
     if (!this->pAudioManager->IsAudioLoaded(audioName))
     {
         // Audio not loaded!
         return;
     }
 
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
+    idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
+}
+
+// UI Actions
+// --------------------------------------------------------------------
+void MediaPlayer::PlayAudio(const char* audioName)
+{
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     // Check if its already playing in a channel
     // If so we can just unpause
     if (idChannel > -1)
@@ -142,6 +166,7 @@ void MediaPlayer::PlayAudio(const char* audioName)
         this->pAudioManager->SetPaused(idChannel, false);
         return;
     }
+
     // If not we have to set the next channel available for the audio to play
     this->m_vecAudioInfo[audioName]["IDCHANNEL"] = this->pAudioManager->PlayAudio(audioName);
     return;
@@ -149,13 +174,8 @@ void MediaPlayer::PlayAudio(const char* audioName)
 
 void MediaPlayer::PauseAudio(const char* audioName)
 {
-    if (!this->pAudioManager->IsAudioLoaded(audioName))
-    {
-        // Audio not loaded!
-        return;
-    }
-
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];;
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     if (idChannel < 0)
     {
         // Audio not in any channel!
@@ -168,13 +188,8 @@ void MediaPlayer::PauseAudio(const char* audioName)
 
 void MediaPlayer::StopAudio(const char* audioName)
 {
-    if (!this->pAudioManager->IsAudioLoaded(audioName))
-    {
-        // Audio not loaded!
-        return;
-    }
-
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     if (idChannel < 0)
     {
         // Audio not in any channel!
@@ -188,16 +203,8 @@ void MediaPlayer::StopAudio(const char* audioName)
 
 void MediaPlayer::AdjustPitch(const char* audioName, float value)
 {
-    const float MIN_PITCH = 0.1f;
-    const float MAX_PITCH = 2.0f;
-
-    if (!this->pAudioManager->IsAudioLoaded(audioName))
-    {
-        // Audio not loaded!
-        return;
-    }
-
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     if (idChannel < 0)
     {
         // Audio not in any channel!
@@ -205,11 +212,7 @@ void MediaPlayer::AdjustPitch(const char* audioName, float value)
     }
 
     float newValue = this->m_vecAudioInfo[audioName]["PITCH"] + value;
-    if (newValue < MIN_PITCH || newValue > MAX_PITCH)
-    {
-        // Pitch out of standards
-        return;
-    }
+    myMath::WrapMinMax(newValue, MIN_PITCH, MAX_PITCH);
 
     this->pAudioManager->SetChannelPitch(idChannel, newValue);
     return;
@@ -217,16 +220,8 @@ void MediaPlayer::AdjustPitch(const char* audioName, float value)
 
 void MediaPlayer::AdjustVolume(const char* audioName, float value)
 {
-    const float MIN_VOLUME = 0.0f;
-    const float MAX_VOLUME = 1.0f;
-
-    if (!this->pAudioManager->IsAudioLoaded(audioName))
-    {
-        // Audio not loaded!
-        return;
-    }
-
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     if (idChannel < 0)
     {
         // Audio not in any channel!
@@ -234,28 +229,15 @@ void MediaPlayer::AdjustVolume(const char* audioName, float value)
     }
 
     float newValue = this->m_vecAudioInfo[audioName]["VOLUME"] + value;
-    if (newValue < MIN_VOLUME || newValue > MAX_VOLUME)
-    {
-        // Volume out of standards
-        return;
-    }
+    myMath::WrapMinMax(newValue, MIN_VOLUME, MAX_VOLUME);
 
     this->pAudioManager->SetChannelVolume(idChannel, newValue);
 }
 
 void MediaPlayer::AdjustPan(const char* audioName, float value)
 {
-    const float MIN_PAN = -1.0f;
-    const float MAX_PAN = 1.0f;
-
-    if (!this->pAudioManager->IsAudioLoaded(audioName))
-    {
-        // Audio not loaded!
-        return;
-    }
-
-    int idChannel = this->m_vecAudioInfo[audioName]["IDCHANNEL"];
-
+    int idChannel;
+    GetAudioIDChannel(audioName, idChannel);
     if (idChannel < 0)
     {
         // Audio not in any channel!
@@ -263,11 +245,7 @@ void MediaPlayer::AdjustPan(const char* audioName, float value)
     }
 
     float newValue = this->m_vecAudioInfo[audioName]["PAN"] + value;
-    if (newValue < MIN_PAN || newValue > MAX_PAN)
-    {
-        // Volume out of standards
-        return;
-    }
+    myMath::WrapMinMax(newValue, MIN_PAN, MAX_PAN);
 
     this->pAudioManager->SetChannelPan(idChannel, newValue);
 }

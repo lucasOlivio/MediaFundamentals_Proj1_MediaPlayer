@@ -80,12 +80,24 @@ void UserInterface::m_NewButton(const char* label, ImVec2& buttonSize, unsigned 
 /* Component layout:
 * [-] LABEL [+]
 */
-void UserInterface::m_NewRegulator(const char* label, iButtonCallback& callback, const char* key)
+void UserInterface::m_NewRegulator(const char* label, iButtonCallback& callback, const char* key, float ratio)
 {
     ImVec2 buttonMSize(BUTTON_WIDTH_M, BUTTON_HEIGHT_M);
+    // Get progress bar size based on all components width
+    ImVec2 barWidth(
+        (2 * buttonMSize.x) + ImGui::CalcTextSize(label).x + DEFAULT_IMGUI_PADDING, // width of [-] <label> [+]
+        0
+    );
 
     // Begin a horizontal layout
     ImGui::BeginGroup();
+    ImGui::NewLine();
+
+    ImGui::ProgressBar(ratio, barWidth);
+    // Decrease new line size so the progress bar be closer to the buttons
+    ImGui::SetWindowFontScale(TEXT_FONT_SIZE/2);
+    ImGui::NewLine();
+    ImGui::SetWindowFontScale(TEXT_FONT_SIZE);
 
     std::string actionDecrease = std::string("DECREASE_") + label;
     this->m_NewButton("-", buttonMSize, GREY_LIGHT_BLUE, callback, key, actionDecrease.c_str());
@@ -106,7 +118,7 @@ void UserInterface::m_NewProgressBar(float currentPosition, float maxLength)
     // Calculate the ratio of the current position to the maximum length
     float ratio = currentPosition / maxLength;
 
-    ImGui::ProgressBar(ratio, ImVec2(-FLT_MIN, 0.0f));
+    ImGui::ProgressBar(ratio);
 }
 
 void UserInterface::BuildFrame(const char* windowName, 
@@ -145,6 +157,9 @@ void UserInterface::BuildFrame(const char* windowName,
         ImGui::Separator();
         // --------------------------------------------
 
+        // Begin a horizontal layout
+        ImGui::BeginGroup();
+
         // Audio name as title in top left corner
         // --------------------------------------------
         int posTextWidth = TEXT_PADDING_LEFT;
@@ -177,22 +192,25 @@ void UserInterface::BuildFrame(const char* windowName,
         this->m_NewButton("STOP", buttonSize, RED, callback, audio.first, "STOP");
         // --------------------------------------------
 
+        // End the horizontal layout
+        ImGui::EndGroup();
+
         // Volume regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        this->m_NewRegulator("VOLUME", callback, audio.first);
+        this->m_NewRegulator("VOLUME", callback, audio.first, audio.second["VOLUME"]);
         // --------------------------------------------
  
         // Pitch regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        this->m_NewRegulator("PITCH", callback, audio.first);
+        this->m_NewRegulator("PITCH", callback, audio.first, audio.second["PITCH_RATIO"]);
         // --------------------------------------------
  
         // Pan regulator
         // --------------------------------------------
         ImGui::SameLine(0, CONTAINER_MARGIN);
-        this->m_NewRegulator("PAN", callback, audio.first);
+        this->m_NewRegulator("PAN", callback, audio.first, audio.second["PAN_RATIO"]);
         // --------------------------------------------
 
         // Playback position bar
@@ -201,8 +219,11 @@ void UserInterface::BuildFrame(const char* windowName,
         ImGui::NewLine();
         ImGui::SameLine(0, TEXT_PADDING_LEFT);
 
-        std::string formattedPlaybackPos = myTime::FormatTime(audio.second["PLAYBACK"]);
-        std::string formattedLength = myTime::FormatTime(audio.second["LENGTH"]);
+        // Formating time to human readable
+        std::string formattedPlaybackPos;
+        myTime::FormatTime(audio.second["PLAYBACK"], formattedPlaybackPos);
+        std::string formattedLength;
+        myTime::FormatTime(audio.second["LENGTH"], formattedLength);
         std::string formattedTimeElapsed = formattedPlaybackPos + "/" + formattedLength;
 
         ImGui::Text(formattedTimeElapsed.c_str());

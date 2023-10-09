@@ -27,6 +27,10 @@ public:
     // GLFW
     GLFWwindow* pWindow;
 
+    // All necessary updates to begin and end a new frame
+    void NewFrame(GLint shaderProgramID);
+    void EndFrame();
+
     // Checks if the window should close using GLFW flags
     bool WindowShouldClose();
 

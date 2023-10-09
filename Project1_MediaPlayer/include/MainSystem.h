@@ -1,9 +1,9 @@
 #pragma once
 
 #include "UserInterface.h"
-#include "RenderingSystem.h"
-#include "ShaderManager.h"
-#include "MediaPlayer/MediaPlayer.h"
+#include "RenderingSystem/RenderingSystem.h"
+#include "RenderingSystem/ShaderManager.h"
+#include "AudioSystem/MediaPlayer/MediaPlayer.h"
 #include <map>
 
 
