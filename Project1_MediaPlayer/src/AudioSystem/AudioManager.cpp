@@ -26,6 +26,7 @@ namespace audio
 
 	bool AudioManager::Initialize()
 	{
+		// Initializes FMOD system and creates #m_MAX_CHANNELS channels in vector
 		if (this->m_isInitialized)
 		{
 			return false;
@@ -66,6 +67,7 @@ namespace audio
 
 	void AudioManager::ClearAudioMap()
 	{
+		// Properly releases the audio using FMOD and delete from map
 		FMOD_RESULT result;
 		for (std::pair<const char*, Audio*> pair : this->m_mappAudio)
 		{
@@ -79,6 +81,7 @@ namespace audio
 
 	void AudioManager::Destroy()
 	{
+		// Releases all audio and FMOD system from memory
 		if (!this->m_isInitialized)
 			return;
 
@@ -101,7 +104,6 @@ namespace audio
 	  * 
 	  * @param file: Audio file name to load
 	  * @param loadType: Which type will be used to load this file into memory (1 - sample, 2 - stream)
-	  * @param audioName: Sets the audio name key, after removing path
 	  * 
 	  * @return: The name of the audio file used as key
 	  */

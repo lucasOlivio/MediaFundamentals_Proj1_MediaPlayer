@@ -26,6 +26,7 @@ MediaPlayer::~MediaPlayer()
 
 void MediaPlayer::m_LoadAudios()
 {
+    // Opening our little "database" to get which audios to load 
     std::ifstream audioDB("audioDB.txt");
 
     if (!audioDB.is_open())
@@ -39,11 +40,18 @@ void MediaPlayer::m_LoadAudios()
     char filePath[MAX_PATH_SIZE];
     // TODO: Understand better the char pointers and how to get paths with spaces
     // For now we don't accept paths with spaces
+    // first col loadType (1 or 2), second col filePath
     while (audioDB >> loadType >> filePath)
     {
+        if (loadType < 1 || loadType > 2)
+        {
+            printf("%d Load type not accepted!", loadType);
+            continue;
+        }
         char* heapFilePath = new char[MAX_PATH_SIZE]; // Avoid overriding our pointer
         strcpy_s(heapFilePath, MAX_PATH_SIZE, filePath);
 
+        // Load audio and initializes all audio info used by the UI
         const char* audioName = this->pAudioManager->LoadAudio(heapFilePath, loadType);
 
         this->m_vecAudioInfo[audioName] = {};
