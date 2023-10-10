@@ -24,6 +24,20 @@ namespace audio
 	{
 	}
 
+	void AudioManager::m_ClearAudioMap()
+	{
+		// Properly releases the audio using FMOD and delete from map
+		FMOD_RESULT result;
+		for (std::pair<const char*, Audio*> pair : this->m_mappAudio)
+		{
+			result = pair.second->pAudio->release();
+			FMODCheckError(result);
+
+			delete pair.first;
+			delete pair.second;
+		}
+	}
+
 	bool AudioManager::Initialize()
 	{
 		// Initializes FMOD system and creates #m_MAX_CHANNELS channels in vector
@@ -65,20 +79,6 @@ namespace audio
 		return true;
 	}
 
-	void AudioManager::ClearAudioMap()
-	{
-		// Properly releases the audio using FMOD and delete from map
-		FMOD_RESULT result;
-		for (std::pair<const char*, Audio*> pair : this->m_mappAudio)
-		{
-			result = pair.second->pAudio->release();
-			FMODCheckError(result);
-
-			delete pair.first;
-			delete pair.second;
-		}
-	}
-
 	void AudioManager::Destroy()
 	{
 		// Releases all audio and FMOD system from memory
@@ -87,7 +87,7 @@ namespace audio
 
 		FMOD_RESULT result;
 
-		this->ClearAudioMap();
+		this->m_ClearAudioMap();
 
 		result = this->m_pSystem->close();
 		FMODCheckError(result);

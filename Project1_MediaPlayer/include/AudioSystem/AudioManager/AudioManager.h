@@ -23,6 +23,9 @@ namespace audio
 
 		FMOD::System* m_pSystem;
 
+		// Clear and release resources
+		void m_ClearAudioMap();
+
 	public:
 		// Ctors & dtors
 		AudioManager();
@@ -32,9 +35,6 @@ namespace audio
 		bool Initialize();
 		void Update();
 		void Destroy();
-
-		// Clear and release Audios from Audio map
-		void ClearAudioMap();
 
 		// Loading Audio
 		const char* LoadAudio(const char* file, int loadType);

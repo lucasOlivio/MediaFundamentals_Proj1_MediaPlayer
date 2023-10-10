@@ -27,3 +27,8 @@ Project 1 for "Media fundamental" class. An audio system to manage audio files a
 - You can hit "PLAY" to start the audio and the playback position will be shown in the bar.
 - You can adjust the volume, pitch and pan accordingly using the "-" and "+" buttons.
 - To stop the audio from playing just click on "STOP".
+
+### Screenshots
+
+![Start screen](Images/Working-screen.png)
+![Playing screen](Images/Playing-screen.png)
